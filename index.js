@@ -13,8 +13,9 @@ return {tag, inner, attrs, raw_attrs}
 }
 var fs=require("fs")
 var path=require("path")
+var process=require("process")
 var {compress}=require("./compress.js")
-var config=fs.existsSync("zeppx.config.js")?require("zeppx.config.js"):{}
+var config=fs.existsSync("zeppx.config.js")?require(path.resolve(process.env.PWD, "zeppx.config.js")):{}
 var {terser, compile:compile_s}=config
 var file=fs.readFileSync(path.resolve(fl), "utf-8")
 var eles=file.match(/<(.*?)>(.*?)<\/(.*?)>/g)
