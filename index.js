@@ -14,7 +14,7 @@ return {tag, inner, attrs, raw_attrs}
 var fs=require("fs")
 var path=require("path")
 var {compress}=require("./compress.js")
-var config=fs.existsSync("zreact.config.js")?require("zreact.config.js"):{}
+var config=fs.existsSync("zeppx.config.js")?require("zepppx.config.js"):{}
 var {terser, compile:compile_s}=config
 var file=fs.readFileSync(path.resolve(fl), "utf-8")
 var eles=file.match(/<(.*?)>(.*?)<\/(.*?)>/g)
