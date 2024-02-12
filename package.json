@@ -1,0 +1,12 @@
+{
+  "name": "zepp-react",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "zreact": "./bin/build.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "terser": "^5.27.0"
+  }
+}
