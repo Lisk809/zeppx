@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("../index.js").compile(process.argv[2])
+require("../lib/core/index.js").build(process.argv[2])
