@@ -10,6 +10,8 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "qs": "^6.11.2",
+    "stringify-object": "3.3.0",
     "terser": "^5.27.0"
   },
   "description": "A compiler tool for Zepp platform, using jsx.",
