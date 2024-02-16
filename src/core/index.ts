@@ -22,15 +22,16 @@ export async function build(fl: string) {
   var parsed = file.replace(/<>/g, "[").replace(/<\/>/g, "]");
   parsed = parsed.replace(/definePage/g, "return ");
   for (var i in eles) {
-    parsed = parsed.replace(
-      new RegExp(eles[i], "g"),
+    parsed = parsed.replace(eles[i],
       `${JSON.stringify(parse(eles[i]))}${+i + 1 === eles.length ? "" : ","}\n`,
     );
   }
   var outFile = fl.split(".")[0] + ".min.js";
+  var xxx=compile(config_ce, parsed)
+  console.log(xxx)
   var content = (await compress(
     outFile,
-    compile(config_ce, parsed),
+    xxx,
     config_tr,
   )) as string;
   if (!fs.existsSync("dist")) fs.mkdirSync("dist");

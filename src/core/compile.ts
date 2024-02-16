@@ -1,12 +1,18 @@
+/// <reference path="stringify.d.ts" />
+import toStr from 'stringify-object';
 import type { CompileConfig } from "./index";
 import { toPt } from "./toProduction";
 import type { Element } from "./parse";
 
 export function compile(config: CompileConfig, parsed: string) {
   let __funcs = [] as Function[],
-    eles = [] as string[];
-  function expose(...fn: Function[]) {
-    return __funcs.push(...fn);
+    __vars = [] as any[],
+    eles = [] as string[]
+  function slice(start:number, end:number, ctx:string){
+    var l_ctx=ctx.split("\n")
+    start=start>0?start:l_ctx.length+start
+    end=end>0?end:end+l_ctx.length
+    return l_ctx.slice(start, end).join("\n")
   }
   const default_setting: CompileConfig = {
     setLayerScrolling: false,
@@ -14,11 +20,11 @@ export function compile(config: CompileConfig, parsed: string) {
   };
   const settings = Object.assign(default_setting, config);
   var app = Object.assign(new Function(parsed)(), settings);
-  app.onView(expose).forEach((e: Element, i: number) => {
+  app.onView().forEach((e: Element, i: number) => {
     eles.push(toPt(e));
   });
   var fns = __funcs.map((fn) => fn.toString());
-  function __compile(fns: string[], eles: string[]) {
+  function __compile(script:string, eles: string[]) {
     return `try {(() => {var e = __$$hmAppManager$$__.currentApp;var t = e.current,{ px: o } =(new DeviceRuntimeCore.WidgetFactory(new DeviceRuntimeCore.HmDomApi(e, t)),e.app.__globals__);try {(() => {var e = __$$hmAppManager$$__.currentApp,t = e.current;new DeviceRuntimeCore.WidgetFactory(new DeviceRuntimeCore.HmDomApi(e, t),"drink");${
       app.useLogger[0]
         ? 'var logger = DeviceRuntimeCore.HmLogger.getLogger("' +
@@ -28,7 +34,7 @@ export function compile(config: CompileConfig, parsed: string) {
     }t.module = DeviceRuntimeCore.Page({
     onInit() {
       hmUI.setLayerScrolling(${app.setLayerScrolling});
-      ${fns.join("\n")}
+      ${script}
       ${eles.join("\n")}
       console.log("index page.js on init invoke")
      },
@@ -40,5 +46,5 @@ export function compile(config: CompileConfig, parsed: string) {
      }});})();} catch (e) {console.log(e);}})();} catch (e) {console.log(e);}
 `;
   }
-  return __compile(fns, eles);
+  return __compile(slice(1,-1,app.onView.toString().replace(/return \((.*?)\)\n/gs, "")), eles);
 }
